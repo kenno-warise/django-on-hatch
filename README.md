@@ -26,23 +26,16 @@
 
 実行環境は「Windows Sybsystem for Linux 2」のUbuntuです。
 
-リポジトリを落として「django-on-hatch」ディレクトリに入ります。
-
-```console
-$ git clone https://github.com/kenno-warise/django-on-hatch.git
-
-$ cd django-on-hatch
-```
 
 Pythonの環境は任意です。
 
 私はpyenvを使用してPython3.10の環境を設定しています。
 
 ```console
-$ pyenv local 3.10
+$ pyenv local 3.7
 
 $ python3 --version
-Python 3.10.0
+Python 3.7.0
 ```
 
 仮想環境を作成して有効にし、`Hatch`をインストールします。
@@ -52,7 +45,15 @@ $ python3 -m venv .venv && . .venv/bin/activate
 
 $ pip install --upgrade pip
 
-$ pip install -r requirements.txt
+$ pip install hatch keyrings.alt
+```
+
+リポジトリを落として「django-on-hatch」ディレクトリに入ります。
+
+```console
+$ git clone https://github.com/kenno-warise/django-on-hatch.git
+
+$ cd django-on-hatch
 ```
 
 ## 設定（開発＆テスト）
@@ -85,7 +86,7 @@ Hatch仮想環境にインストールされるDjangoは設定されています
 ```toml
 # デフォルト環境の依存パッケージ
 [tool.hatch.envs.default]
-dependencies = ["django == 4.2.2"]
+dependencies = ["django == 2.2.5"]
 ```
 
 Djangoプロジェクトを作成
@@ -120,7 +121,10 @@ migrate = "python3 manage.py migrate"
 createsuperuser = "python3 manage.py createsuperuser"
 runserver = "python3 manage.py runserver"
 startapp = "python3 manage.py startapp {args}"
+shell = "python3 manage.py shell"
 test = "python3 manage.py test {args}"
+cov = "coverage run --include=app/* --omit=app/test*,app/__init__.py,app/migrations manage.py test {args}"
+cov-report = "coverage report -m"
 ```
 
 データベースを作成する場合はマイグレートを実行します。
@@ -226,14 +230,13 @@ urlpatterns = [
 ]
 ```
 
-`pyproject.toml`
+`requirements.txt`
 
 `app_1`の部分をDjangoアプリ名に当てはめます。
 
-```toml
-# デフォルト環境の依存パッケージ
-[tool.hatch.envs.default]
-dependencies = ["django", "app_1"]
+```
+django==2.2.5
+app_1
 ```
 
 必要であればマイグレートとスーパーユーザーを作成します。

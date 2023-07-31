@@ -46,7 +46,7 @@ runserver = "python3 manage.py runserver"
 startapp = "python3 manage.py startapp {args}"
 shell = "python3 manage.py shell"
 test = "python3 manage.py test {args}"
-cov = coverage run --include=app/* --omit=app/test*,app/__init__.py,app/migrations manage.py test {args}"
+cov = "coverage run --include=app/* --omit=app/test*,app/__init__.py,app/migrations manage.py test {args}"
 cov-report = "coverage report -m"
 
 # pythonリンター
