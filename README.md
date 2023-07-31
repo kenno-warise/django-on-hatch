@@ -29,7 +29,7 @@
 
 Pythonの環境は任意です。
 
-私はpyenvを使用してPython3.10の環境を設定しています。
+私はpyenvを使用してPython3.7の環境を設定しています。
 
 ```console
 $ pyenv local 3.7
