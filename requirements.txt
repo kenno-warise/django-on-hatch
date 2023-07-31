@@ -1,2 +1,1 @@
-hatch==1.7.0
-keyrings.alt==4.2.0
+django==2.2.5
