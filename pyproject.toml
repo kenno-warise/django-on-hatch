@@ -3,7 +3,7 @@ requires = ["hatchling", "hatch-requirements-txt"]
 build-backend = "hatchling.build"
 
 [project]
-name = "myproject" # Appのパッケージ名（PyPIにアップロードする際は要確認）
+name = ""
 dynamic = ["version", "dependencies"]
 description = ''
 readme = "README.md"
@@ -30,7 +30,7 @@ Issues = "https://github.com/unknown/Appのパッケージ名/issues"
 Source = "https://github.com/unknown/Appのパッケージ名"
 
 [tool.hatch.version]
-# path = "app_1/__init__.py"
+path = "app/__init__.py"
 
 # デフォルト環境の依存パッケージ
 [tool.hatch.envs.default]
@@ -63,11 +63,6 @@ style = [
   "ruff --fix {args:app/views.py app/tests.py}",
   "black --check --diff {args:app/views.py app/tests.py}"
 ]
-# fmt = [
-#   "black {args:.}",
-#   "ruff --fix {args:.}",
-#   "style",
-# ]
 all = [
   "style",
   "typing",
@@ -128,6 +123,6 @@ ignore = [
 # ビルド実行時に含めるファイルと含めないファイルの設定
 # 以下は配布用Djangoアプリに対しての設定
 [tool.hatch.build]
-include = ["app_1/*"]
-exclude = ["app_1/migrations/*"]
+include = ["app/*"]
+exclude = ["app/migrations/*"]
 
