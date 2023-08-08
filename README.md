@@ -9,7 +9,7 @@
 
 - [詳細](#詳細)
 - [インストール](#インストール)
-- [設定（開発＆テスト）](#設定)
+- [設定（開発＆テスト）](#設定（開発＆テスト）)
 - [Djangoプロジェクトに設定（開発）](#Djangoプロジェクトに設定（開発）)
 - [Djangoプロジェクトに設定（テスト）](#Djangoプロジェクトに設定（テスト）)
 - [License](#license)
@@ -58,12 +58,6 @@ $ cd django-on-hatch
 
 ## 設定（開発＆テスト）
 
-Hatchの仮想環境名を作成する。
-
-```console
-$ hatch new --init 仮想環境名（プロジェクト名）
-```
-
 Hatchが配置する仮想環境のディレクトリを決める。
 
 デフォルト設定で配置されるディレクトリは以下のコマンドで参照できる。
@@ -79,14 +73,12 @@ data = "/home/user/.local/share/hatch"
 $ hatch config set dirs.data 配置するディレクトリ
 ```
 
-Hatch仮想環境にインストールされるDjangoは設定されていますが、バージョンを指定したい場合は以下を編集してください。
+Djangoのバージョンを指定したい場合は以下を編集してください。
 
-`pyproject.toml`
+`requirements.txt`
 
-```toml
-# デフォルト環境の依存パッケージ
-[tool.hatch.envs.default]
-dependencies = ["django == 2.2.5"]
+```
+django==2.2.5
 ```
 
 Djangoプロジェクトを作成
@@ -144,7 +136,7 @@ $ hatch run runserver
 Djangoアプリを作成
 
 ```console
-$ hatch run startapp app_1
+$ hatch run startapp app_2
 ```
 
 バージョン情報の設定
@@ -153,10 +145,10 @@ $ hatch run startapp app_1
 
 ```toml
 [tool.hatch.version]
-path = "app_1/__init__.py"
+path = "app_2/__init__.py"
 ```
 
-`app_1/__init__.py`
+`app_2/__init__.py`
 
 ```python
 __version__ = "0.0.1"
@@ -171,12 +163,12 @@ $ hatch version
 
 DjangoアプリをパッケージングしてPyPIにアップロードする。
 
-`pyproject.toml`に配布するファイルと配布しないファイルを設定。
+`pyproject.toml`に配布するファイルと配布しないファイルを設定できます。
 
 ```toml
 [tool.hatch.build]
-include = ["app_1/*"] # templatesとstaticも含まれます。
-exclude = ["app_1/migrations/*"]
+include = ["app_2/*"] # templatesとstaticも含まれます。
+exclude = ["app_2/migrations/*"]
 ```
 
 上記以外にあれば追記します。
@@ -207,18 +199,18 @@ $ hatch publish
 
 `myproject/settings.py`
 
-`app_1`の部分をDjangoアプリ名に当てはめます。
+`pkg`の部分をDjangoアプリ名に当てはめます。
 
 ```python
 INSTALLED_APPS = [
     ...,
-    "app_1",
+    "pkg",
 ]
 ```
 
 `myproject/urls.py`
 
-`app_1`の部分をDjangoアプリ名に当てはめます。
+`pkg`の部分をDjangoアプリ名に当てはめます。
 
 ```python
 ...
@@ -226,17 +218,17 @@ from django.urls import path, include
 
 urlpatterns = [
     ...,
-    path('', include('app_1.urls')),
+    path('', include('pkg.urls')),
 ]
 ```
 
 `requirements.txt`
 
-`app_1`の部分をDjangoアプリ名に当てはめます。
+`pkg`の部分をDjangoアプリ名に当てはめます。
 
 ```
 django==2.2.5
-app_1
+pkg
 ```
 
 必要であればマイグレートとスーパーユーザーを作成します。
