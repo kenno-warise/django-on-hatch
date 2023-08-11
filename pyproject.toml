@@ -29,6 +29,9 @@ Documentation = "https://github.com/unknown/Appのパッケージ名#readme"
 Issues = "https://github.com/unknown/Appのパッケージ名/issues"
 Source = "https://github.com/unknown/Appのパッケージ名"
 
+[tool.hatch.metadata.hooks.requirements_txt]
+files = ["requirements.txt"]
+
 [tool.hatch.version]
 path = "app/__init__.py"
 
