@@ -50,12 +50,69 @@ $ pip install hatch keyrings.alt
 
 「keyrings.alt」はPyPIに公開する際に使います。
 
-リポジトリを落として「django-on-hatch」ディレクトリに入ります。
+次に、Hatchプロジェクトの初期化を実行し「pyproject.toml」を作成します。
 
 ```console
-$ git clone https://github.com/kenno-warise/django-on-hatch.git
+$ hatch new --init
+Project name: Django project
+Description []: Django開発のプロジェクト
+Wrote: pyproject.toml
 
-$ cd django-on-hatch
+$ ls
+pyproject.toml
+```
+
+「Project name」と「Description」を設定するとカレントディレクトリに「pyproject.toml」が作成されます。
+
+エディターモードで「pyproject.toml」の一部を変更します。
+
+```toml
+# pyproject.toml
+
+...
+
+[project]
+...
+# dynamic = ["version"]  # 動的のキーに対してコメントアウト
+...
+dependencies = ["Django"]  # 依存関係にDjangoを設定
+```
+
+「project」テーブルの「dynamic」キーと「dependencies」キーに対して変更を加えます。
+
+Hatchコマンドを使ってDjangoプロジェクトを作成します。
+
+```console
+$ hatch run django-admin startproject config
+```
+
+次に「config」ディレクトリにDjangoアプリのカスタムテンプレートである「django-on-hatch」レポジトリを使ってDjangoアプリを作成します。
+
+```console
+$ hatch run django-admin startapp \
+--template=https://github.com/kenno-warise/django-on-hatch/archive/main.zip \
+--extension=py,toml,txt \
+new_app \
+config
+```
+
+「config」ディレクトリ内には「new_app」に適した開発環境が整えられています。
+
+```
+config
+├── LICENSE.txt
+├── README.md
+├── analytics
+│   └── __init__.py
+├── config
+│   ├── __init__.py
+│   ├── asgi.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+├── manage.py
+├── pyproject.toml
+└── requirements.txt
 ```
 
 ## 設定（開発＆テスト）
@@ -75,18 +132,12 @@ data = "/home/user/.local/share/hatch"
 $ hatch config set dirs.data 配置するディレクトリ
 ```
 
-Djangoのバージョンを指定したい場合は以下を編集してください。
+Djangoのバージョンの変更をしたい場合は以下を編集してください。
 
 `requirements.txt`
 
 ```
 django==2.2.5
-```
-
-Djangoプロジェクトを作成
-
-```console
-$ hatch run django-admin startproject myproject .
 ```
 
 言語を設定します。
@@ -110,14 +161,17 @@ USE_TZ = True
 
 ```toml
 [tool.hatch.envs.default.scripts]
-makemigrations = "python3 manage.py makemigrations {args}"
 migrate = "python3 manage.py migrate"
+makemigrations = "python3 manage.py makemigrations {args}"
 createsuperuser = "python3 manage.py createsuperuser"
 runserver = "python3 manage.py runserver"
 startapp = "python3 manage.py startapp {args}"
 shell = "python3 manage.py shell"
 test = "python3 manage.py test {args}"
-cov = "coverage run --include=app/* --omit=app/test*,app/__init__.py,app/migrations manage.py test {args}"
+cov = "coverage run \
+  --include=new_app/* \
+  --omit=new_app/test*,new_app/__init__.py,new_app/migrations/* \
+  manage.py test {args}"
 cov-report = "coverage report -m"
 ```
 
@@ -143,19 +197,6 @@ $ hatch run startapp app_2
 
 バージョン情報の設定
 
-`pyproject.toml`
-
-```toml
-[tool.hatch.version]
-path = "app_2/__init__.py"
-```
-
-`app_2/__init__.py`
-
-```python
-__version__ = "0.0.1"
-```
-
 Hatchの「version」コマンドでDjangoアプリのバージョン情報を確認できます。
 
 ```console
@@ -169,8 +210,8 @@ DjangoアプリをパッケージングしてPyPIにアップロードする。
 
 ```toml
 [tool.hatch.build]
-include = ["app_2/*"] # templatesとstaticも含まれます。
-exclude = ["app_2/migrations/*"]
+include = ["new_app/*"] # templatesとstaticも含まれます。
+exclude = ["new_app/migrations/*"]
 ```
 
 上記以外にあれば追記します。
@@ -201,18 +242,18 @@ $ hatch publish
 
 `myproject/settings.py`
 
-`pkg`の部分をDjangoアプリ名に当てはめます。
+`new_app`の部分をDjangoアプリ名に当てはめます。
 
 ```python
 INSTALLED_APPS = [
     ...,
-    "pkg",
+    "new_app",
 ]
 ```
 
 `myproject/urls.py`
 
-`pkg`の部分をDjangoアプリ名に当てはめます。
+`new_app`の部分をDjangoアプリ名に当てはめます。
 
 ```python
 ...
@@ -220,17 +261,8 @@ from django.urls import path, include
 
 urlpatterns = [
     ...,
-    path('', include('pkg.urls')),
+    path('', include('new_app.urls')),
 ]
-```
-
-`requirements.txt`
-
-`pkg`の部分をDjangoアプリ名に当てはめます。
-
-```
-django==2.2.5
-pkg
 ```
 
 必要であればマイグレートとスーパーユーザーを作成します。
