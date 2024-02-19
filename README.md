@@ -69,12 +69,12 @@ pyproject.toml
 ```toml
 # pyproject.toml
 
-...
+# ...
 
 [project]
-...
+# ...
 # dynamic = ["version"]  # 動的のキーに対してコメントアウト
-...
+# ...
 dependencies = ["Django"]  # 依存関係にDjangoを設定
 ```
 
@@ -90,10 +90,10 @@ $ hatch run django-admin startproject config
 
 ```console
 $ hatch run django-admin startapp \
---template=https://github.com/kenno-warise/django-on-hatch/archive/main.zip \
---extension=py,toml,txt \
-new_app \
-config
+    --template=https://github.com/kenno-warise/django-on-hatch/archive/main.zip \
+    --extension=py,toml,txt \
+    new_app \
+    config
 ```
 
 「config」ディレクトリ内には「new_app」に適した開発環境が整えられています。
@@ -113,6 +113,12 @@ config
 ├── manage.py
 ├── pyproject.toml
 └── requirements.txt
+```
+
+```console
+$ cd config
+
+$ hatch env create
 ```
 
 ## 設定
@@ -142,7 +148,7 @@ django==2.2.5
 
 言語を設定します。
 
-`myproject/settings.py`
+`config/settings.py`
 
 ```python
 # Internationalization
@@ -168,10 +174,7 @@ runserver = "python3 manage.py runserver"
 startapp = "python3 manage.py startapp {args}"
 shell = "python3 manage.py shell"
 test = "python3 manage.py test {args}"
-cov = "coverage run \
-  --include=new_app/* \
-  --omit=new_app/test*,new_app/__init__.py,new_app/migrations/* \
-  manage.py test {args}"
+cov = "coverage run --include=new_app/* --omit=new_app/test*,new_app/__init__.py,new_app/migrations/* manage.py test {args}"
 cov-report = "coverage report -m"
 ```
 
