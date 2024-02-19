@@ -3,37 +3,33 @@
 [![PyPI - Version](https://img.shields.io/pypi/v/django-hatch.svg)](https://pypi.org/project/django-hatch)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/django-hatch.svg)](https://pypi.org/project/django-hatch)
 
+このリポジトリは[Hatch](https://hatch.pypa.io/latest/)プロジェクトマネージャーを使ったDjangoのアプリ開発用テンプレートです。
+
+Djangoの既存プロジェクトのディレクトリからDjangoのサブコマンドである「startapp」及び、オプションの「--template、--extension」を使用してDjangoアプリのカスタムテンプレートを読み込んでください。
+
+無事にカスタムテンプレートが読み込まれると、Hatchプロジェクトマネージャーを使ったDjangoアプリの開発をスタートすることができます。
+
+Hatchの使い方を知っているだけで、以下の事が容易に実行できます。
+
+- CI/CD
+
 -----
 
-**TOC**
-
-[toc]
-
 **目次**
-
-- [詳細](#詳細)
 - [インストール](#インストール)
 - [設定（開発＆テスト）](#設定（開発＆テスト）)
 - [Djangoプロジェクトに設定（開発）](#Djangoプロジェクトに設定（開発）)
 - [Djangoプロジェクトに設定（テスト）](#Djangoプロジェクトに設定（テスト）)
 - [License](#license)
 
-## 詳細
-
-このリポジトリは[Hatch](https://hatch.pypa.io/latest/)プロジェクトマネージャーを使ったDjangoプロジェクトの開発またはテスト（お試し）ツールです。
-
-配布用としてDjangoアプリをアップロードする環境を自動構築または配布用としてアップロードされたDjangoアプリをこのDjangoプロジェクトに組み込んでテストすることができます。
-
-使用方法は以下からご覧ください。
-
 ## インストール
 
-実行環境は「Windows Sybsystem for Linux 2」のUbuntuです。
+実行環境は「Windows Sybsystem for Linux 2」のUbuntuターミナルです。
 
 
-Pythonの環境は任意です。
+Pythonの環境をセットアップします。
 
-私はpyenvを使用してPython3.7の環境を設定しています。
+pyenvを使用してPython3.7の環境を作成した例。
 
 ```console
 $ pyenv local 3.7
@@ -51,6 +47,8 @@ $ pip install --upgrade pip
 
 $ pip install hatch keyrings.alt
 ```
+
+「keyrings.alt」はPyPIに公開する際に使います。
 
 リポジトリを落として「django-on-hatch」ディレクトリに入ります。
 
