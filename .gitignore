@@ -1,9 +1,7 @@
-.venv
-db.sqlite3
-__pycache__
-migrations/*
-manage.py
-myproject
-app_1
-dist
 .python-version
+.venv
+__pycache__
+db.sqlite3
+dist
+migrations/*
+venv
