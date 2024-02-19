@@ -106,7 +106,7 @@ config
 config
 ├── LICENSE.txt
 ├── README.md
-├── analytics
+├── new_app
 │   └── __init__.py
 ├── config
 │   ├── __init__.py
