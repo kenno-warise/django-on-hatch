@@ -187,7 +187,7 @@ Djangoを起動します。
 $ hatch run runserver
 ```
 
-## Djangoプロジェクトに設定（開発）
+## 開発
 
 Djangoアプリを作成
 
@@ -236,11 +236,11 @@ $ hatch build
 $ hatch publish
 ```
 
-## Djangoプロジェクトに設定（テスト）
+## テスト
 
 アップロード済みのDjangoアプリを設定します。
 
-`myproject/settings.py`
+`config/settings.py`
 
 `new_app`の部分をDjangoアプリ名に当てはめます。
 
@@ -251,7 +251,7 @@ INSTALLED_APPS = [
 ]
 ```
 
-`myproject/urls.py`
+`config/urls.py`
 
 `new_app`の部分をDjangoアプリ名に当てはめます。
 
