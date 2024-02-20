@@ -25,7 +25,7 @@ classifiers = [
 ]
 
 [project.urls]
-Documentation = "https://github.com/unknown/{{ app_name#readme"
+Documentation = "https://github.com/unknown/{{ app_name }}#readme"
 Issues = "https://github.com/unknown/{{ app_name }}/issues"
 Source = "https://github.com/unknown/{{ app_name }}"
 
@@ -49,10 +49,7 @@ runserver = "python3 manage.py runserver"
 startapp = "python3 manage.py startapp {args}"
 shell = "python3 manage.py shell"
 test = "python3 manage.py test {args}"
-cov = "coverage run \
-  --include={{app_name }}/* \
-  --omit={{ app_name }}/test*,{{ app_name }}/__init__.py,{{ app_name }}/migrations/* \
-  manage.py test {args}"
+cov = "coverage run --include={{app_name }}/* --omit={{ app_name }}/test*,{{ app_name }}/__init__.py,{{ app_name }}/migrations/* manage.py test {args}"
 cov-report = "coverage report -m"
 
 # pythonリンター
