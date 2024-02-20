@@ -1,1 +1,9 @@
-<h1>Welcome to the {{ app_name }} site!!</h1>
+{% load static %}
+<html>
+  <head>
+    <link rel="stylesheet" href="{% static '{{ app_name }}/css/style.css' %}">
+  </head>
+  <body>
+    <h1>Welcome to the {{ app_name }} site!!</h1>
+  </body>
+</html>
