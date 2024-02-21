@@ -3,7 +3,7 @@ requires = ["hatchling", "hatch-requirements-txt"]
 build-backend = "hatchling.build"
 
 [project]
-name = "{{ app_name }}"
+name = "{{ project_name }}"
 dynamic = ["version", "dependencies"]
 description = ''
 readme = "README.md"
@@ -25,15 +25,15 @@ classifiers = [
 ]
 
 [project.urls]
-Documentation = "https://github.com/unknown/{{ app_name }}#readme"
-Issues = "https://github.com/unknown/{{ app_name }}/issues"
-Source = "https://github.com/unknown/{{ app_name }}"
+Documentation = "https://github.com/unknown/{{ project_name }}#readme"
+Issues = "https://github.com/unknown/{{ project_name }}/issues"
+Source = "https://github.com/unknown/{{ project_name }}"
 
 [tool.hatch.metadata.hooks.requirements_txt]
 files = ["requirements.txt"]
 
 [tool.hatch.version]
-path = "{{ app_name }}/__init__.py"
+path = "{{ project_name }}/__init__.py"
 
 # デフォルト環境の依存パッケージ
 [tool.hatch.envs.default]
@@ -49,7 +49,7 @@ runserver = "python3 manage.py runserver"
 startapp = "python3 manage.py startapp {args}"
 shell = "python3 manage.py shell"
 test = "python3 manage.py test {args}"
-cov = "coverage run --include={{app_name }}/* --omit={{ app_name }}/test*,{{ app_name }}/__init__.py,{{ app_name }}/migrations/* manage.py test {args}"
+cov = "coverage run --include={{ project_name }}/* --omit={{ project_name }}/test*,{{ project_name }}/__init__.py,{{ project_name }}/migrations/* manage.py test {args}"
 cov-report = "coverage report -m"
 
 # pythonリンター
@@ -61,10 +61,10 @@ dependencies = [
   "ruff>=0.0.243",
 ]
 [tool.hatch.envs.lint.scripts]
-typing = "mypy --install-types --non-interactive {args:{{ app_name }}/views.py {{ app_name }}/tests.py}"
+typing = "mypy --install-types --non-interactive {args:{{ project_name }}/views.py {{ project_name }}/tests.py}"
 style = [
-  "ruff --fix {args:{{ app_name }}/views.py {{ app_name }}/tests.py}",
-  "black --check --diff {args:{{ app_name }}/views.py {{ app_name }}/tests.py}"
+  "ruff --fix {args:{{ project_name }}/views.py {{ project_name }}/tests.py}",
+  "black --check --diff {args:{{ project_name }}/views.py {{ project_name }}/tests.py}"
 ]
 all = [
   "style",
@@ -129,6 +129,6 @@ ignore = [
 # ビルド実行時に含めるファイルと含めないファイルの設定
 # 以下は配布用Djangoアプリに対しての設定
 [tool.hatch.build]
-include = ["{{ app_name }}/*"]
-exclude = ["{{ app_name }}/migrations/*"]
+include = ["{{ project_name }}/*"]
+exclude = ["{{ project_name }}/migrations/*"]
 
