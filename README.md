@@ -161,6 +161,9 @@ $ hatch run migrate
 $ hatch run runserver
 ```
 
+![welcome_new_app_1](https://github.com/kenno-warise/django-on-hatch/assets/51676019/0507b913-ff82-4fd8-b776-0afc3f4a2b7e)
+
+
 ## 設定
 
 Hatchが配置する仮想環境のディレクトリを決める。
