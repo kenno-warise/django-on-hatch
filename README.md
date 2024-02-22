@@ -198,7 +198,7 @@ Djangoのバージョンの変更をしたい場合は以下を編集してく�
 `requirements.txt`
 
 ```
-django==2.2.5
+django==3.2.24
 ```
 
 ショートカットとしてHatchの「run」コマンドで実行できるDjangoのコマンドは`pyproject.toml`の「tool.hatch.envs.default.scripts」テーブルによって登録しています。
