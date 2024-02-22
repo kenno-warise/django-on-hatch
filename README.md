@@ -5,7 +5,7 @@
 
 このリポジトリは[Hatch](https://hatch.pypa.io/latest/)プロジェクトマネージャーを使ったDjangoのアプリ開発用テンプレートです。
 
-Djangoのサブコマンドである「django-admin startproject」及び、オプションの「--template、--extension」を使用してこのカを読み込んでください。
+Djangoのサブコマンドである「django-admin startproject」及び、オプションの「--template、--extension」を使用してこのカスタムテンプレートを読み込んでください。
 
 無事にカスタムテンプレートが読み込まれると、Hatchプロジェクトマネージャーを使ったDjangoアプリの開発をスタートすることができます。
 
