@@ -166,6 +166,18 @@ $ hatch run runserver
 
 ## 設定
 
+PyPIに公開されるパッケージの名前は「pyproject.toml」の「project」テーブルにある「name」キーとなります。
+
+デフォルトではカスタムテンプレートを読み込んだ際の「アプリ名」になっています。PyPIにおいてパッケージの名前が被ってしまうと公開することができないので事前に確認しておきましょう。
+
+```toml
+# pyproject.toml
+
+[project]
+name = ["new_app"]
+# ...
+```
+
 Hatchが配置する仮想環境のディレクトリを決める。
 
 デフォルト設定で配置されるディレクトリは以下のコマンドで参照できる。
@@ -263,7 +275,7 @@ $ hatch publish
 
 プロジェクトはGitHub等に保存しておきます。
 
-既存プロジェクトの「new_app」を削除すると他のディレクトリに移動します。
+既存プロジェクトの「new_app」を削除するか、他のディレクトリに移動します。
 
 ```console
 $ ls
@@ -272,24 +284,43 @@ LICENSE.txt  README.md  config  db.sqlite3  manage.py  new_app  pyproject.toml  
 $ rm -rf new_app
 ```
 
-「requirements.txt」にPyPIへアップロードした「new_app」を定義します。
+既存アプリのプロジェクトを作成する前のディレクトリに戻ります。
 
-```txt
-new_app
+```console
+$ cd ..
+
+$ ls
+new_app pyproject.toml
 ```
+
+アプリ開発のプロジェクトを立ち上げる以前のHatch環境である「pyproject.toml」の「project」テーブルの「dependencies」キーにPyPIへアップロードした「new_app」を定義します。
+
+```toml
+# pyproject.toml
+
+[project]
+# ...
+dependencies = [
+  "Django",
+  "new_app",
+]
+
+```
+
+現在のHatch環境ではDjangoのコマンドを登録していないので、フルコマンドで入力していきます。
 
 必要であればマイグレートとスーパーユーザーを作成します。
 
 ```console
-$ hatch run migrate
+$ hatch run python3 new_app/manage.py migrate
 
-$ hatch run createsuperuser
+$ hatch run python3 new_app/manage.py createsuperuser
 ```
 
-サーバーを起動します。
+最後にサーバーを起動できれば成功です。
 
 ```console
-$ hatch run runserver
+$ hatch run python3 new_app/manage.py runserver
 ```
 
 
