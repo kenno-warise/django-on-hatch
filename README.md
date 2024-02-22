@@ -97,8 +97,6 @@ $ hatch run django-admin startproject \
 new_app
 ├── LICENSE.txt
 ├── README.md
-├── new_app
-│   └── __init__.py
 ├── config
 │   ├── __init__.py
 │   ├── asgi.py
@@ -106,6 +104,23 @@ new_app
 │   ├── urls.py
 │   └── wsgi.py
 ├── manage.py
+├── new_app
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── migrations
+│   │   └── __init__.py
+│   ├── models.py
+│   ├── static
+│   │   └── new_app
+│   │       └── css
+│   │           └── style.css
+│   ├── templates
+│   │   └── new_app
+│   │       └── index.html
+│   ├── tests.py
+│   ├── urls.py
+│   └── views.py
 ├── pyproject.toml
 └── requirements.txt
 ```
@@ -118,7 +133,24 @@ $ cd new_app
 $ hatch env create
 
 $ hatch env show
-
+                      Standalone
+┏━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┓
+┃ Name    ┃ Type    ┃ Dependencies  ┃ Scripts         ┃
+┡━━━━━━━━━╇━━━━━━━━━╇━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━┩
+│ default │ virtual │ coverage      │ cov             │
+│         │         │               │ cov-report      │
+│         │         │               │ createsuperuser │
+│         │         │               │ makemigrations  │
+│         │         │               │ migrate         │
+│         │         │               │ runserver       │
+│         │         │               │ shell           │
+│         │         │               │ startapp        │
+│         │         │               │ test            │
+├─────────┼─────────┼───────────────┼─────────────────┤
+│ lint    │ virtual │ black>=23.1.0 │ all             │
+│         │         │ mypy>=1.0.0   │ style           │
+│         │         │ ruff>=0.0.243 │ typing          │
+└─────────┴─────────┴───────────────┴─────────────────┘
 ```
 
 データベースを初期化してアプリを起動します。
@@ -232,6 +264,7 @@ $ hatch publish
 
 ```console
 $ ls
+LICENSE.txt  README.md  config  db.sqlite3  manage.py  new_app  pyproject.toml  requirements.txt
 
 $ rm -rf new_app
 ```
