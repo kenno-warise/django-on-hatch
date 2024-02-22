@@ -5,12 +5,14 @@
 
 このリポジトリは[Hatch](https://hatch.pypa.io/latest/)プロジェクトマネージャーを使ったDjangoのアプリ開発用テンプレートです。
 
-Djangoの既存プロジェクトのディレクトリからDjangoのサブコマンドである「startapp」及び、オプションの「--template、--extension」を使用してDjangoアプリのカスタムテンプレートを読み込んでください。
+Djangoのサブコマンドである「django-admin startproject」及び、オプションの「--template、--extension」を使用してこのカを読み込んでください。
 
 無事にカスタムテンプレートが読み込まれると、Hatchプロジェクトマネージャーを使ったDjangoアプリの開発をスタートすることができます。
 
 Hatchの使い方を知っているだけで、以下の事が容易に実行できます。
 
+- 開発環境のセットアップ
+- スピーディーなアプリ開発
 - CI/CD
 
 -----
@@ -29,7 +31,7 @@ Hatchの使い方を知っているだけで、以下の事が容易に実行で
 
 Pythonの環境をセットアップします。
 
-pyenvを使用してPython3.7の環境を作成した例。
+以下はpyenvを使用してPython3.7の環境を作成した例。
 
 ```console
 $ pyenv local 3.7
@@ -80,26 +82,19 @@ dependencies = ["Django"]  # 依存関係にDjangoを設定
 
 「project」テーブルの「dynamic」キーと「dependencies」キーに対して変更を加えます。
 
-Hatchコマンドを使ってDjangoプロジェクトを作成します。
+Hatchの「run」コマンドを使ってDjangoプロジェクトのカスタムテンプレートを解凍します。
 
 ```console
-$ hatch run django-admin startproject config
-```
-
-次に「config」ディレクトリにDjangoアプリのカスタムテンプレートである「django-on-hatch」レポジトリを使ってDjangoアプリを作成します。
-
-```console
-$ hatch run django-admin startapp \
+$ hatch run django-admin startproject \
     --template=https://github.com/kenno-warise/django-on-hatch/archive/main.zip \
-    --extension=py,toml,txt \
-    new_app \
-    config
+    --extension=py,toml,txt,html,css \
+    new_app
 ```
 
-「config」ディレクトリ内には「new_app」に適した開発環境が整えられています。
+作成された「new_app」ディレクトリ内には既にアプリケーションに因んだ環境が整えられています。
 
 ```
-config
+new_app
 ├── LICENSE.txt
 ├── README.md
 ├── new_app
@@ -115,10 +110,23 @@ config
 └── requirements.txt
 ```
 
+「new_app」用に設定された「pyproject.toml」が配置されているディレクトリに移動し、hatchの環境を作成します。
+
 ```console
-$ cd config
+$ cd new_app
 
 $ hatch env create
+
+$ hatch env show
+
+```
+
+データベースを初期化してアプリを起動します。
+
+```console
+$ hatch run migrate
+
+$ hatch run runserver
 ```
 
 ## 設定
@@ -144,23 +152,6 @@ Djangoのバージョンの変更をしたい場合は以下を編集してく�
 
 ```
 django==2.2.5
-```
-
-言語を設定します。
-
-`config/settings.py`
-
-```python
-# Internationalization
-# https://docs.djangoproject.com/en/4.2/topics/i18n/
-
-LANGUAGE_CODE = 'ja'
-
-TIME_ZONE = 'Asia/Tokyo'
-
-USE_I18N = True
-
-USE_TZ = True
 ```
 
 ショートカットとしてHatchの「run」コマンドで実行できるDjangoのコマンドは`pyproject.toml`の「tool.hatch.envs.default.scripts」テーブルによって登録しています。
@@ -191,12 +182,6 @@ $ hatch run runserver
 ```
 
 ## 開発
-
-Djangoアプリを作成
-
-```console
-$ hatch run startapp app_2
-```
 
 バージョン情報の設定
 
@@ -239,33 +224,22 @@ $ hatch build
 $ hatch publish
 ```
 
-## テスト
+## パッケージの組み込みテスト
 
-アップロード済みのDjangoアプリを設定します。
+プロジェクトはGitHub等に保存しておきます。
 
-`config/settings.py`
+既存プロジェクトの「new_app」を削除すると他のディレクトリに移動します。
 
-`new_app`の部分をDjangoアプリ名に当てはめます。
+```console
+$ ls
 
-```python
-INSTALLED_APPS = [
-    ...,
-    "new_app",
-]
+$ rm -rf new_app
 ```
 
-`config/urls.py`
+「requirements.txt」にPyPIへアップロードした「new_app」を定義します。
 
-`new_app`の部分をDjangoアプリ名に当てはめます。
-
-```python
-...
-from django.urls import path, include
-
-urlpatterns = [
-    ...,
-    path('', include('new_app.urls')),
-]
+```txt
+new_app
 ```
 
 必要であればマイグレートとスーパーユーザーを作成します。
