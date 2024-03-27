@@ -1,4 +1,5 @@
-<!doctype html>
+<!--{ load static }-->
+<!doactype html>
 <html lang="ja">
   <head>
     <meta charset="utf-8">
@@ -10,7 +11,14 @@
     <!-- Bootstrap ICON -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
-    <!-- { block {{ project_name }}-style }{ endblock } -->
+    <!-- Favicon
+      <link rel="shortcut icon" type="image/x-icon" href="{ static '{{ project_name }}/icon/favicon.png' }">
+    -->
+
+    <!-- Original App CSS
+    { block {{ project_name }}-style }{ endblock {{ project_name }}-style }
+    -->
+
   </head>
   <body>
     <!-- { block content } -->
