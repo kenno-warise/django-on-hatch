@@ -1,11 +1,11 @@
-# django-on-hatch
+a# django-on-hatch
 
 [![PyPI - Version](https://img.shields.io/pypi/v/django-hatch.svg)](https://pypi.org/project/django-hatch)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/django-hatch.svg)](https://pypi.org/project/django-hatch)
 
 このリポジトリは[Hatch](https://hatch.pypa.io/latest/)プロジェクトマネージャーを使ったDjangoのアプリ開発用テンプレートです。
 
-Djangoのサブコマンドである「django-admin startproject」及び、オプションの「--template、--extension」を使用してこのカスタムテンプレートを読み込んでください。
+Djangoのサブコマンドである「django-admin startproject」及び、オプションの「--template、--extension」を使用してこのカスタムテンプレートを読みます。
 
 無事にカスタムテンプレートが読み込まれると、Hatchプロジェクトマネージャーを使ったDjangoアプリの開発をスタートすることができます。
 
@@ -19,23 +19,19 @@ Hatchの使い方を知っているだけで、以下の事が容易に実行で
 
 **目次**
 - [インストール](#インストール)
-- [設定](#設定)
-- [開発](#開発)
+- [準備](#準備)
+- [Djangoプロジェクト環境のセットアップ](#Djangoプロジェクト環境のセットアップ)
+- [デプロイ](#デプロイ)
 - [パッケージの組み込みテスト](#パッケージの組み込みテスト)
 - [License](#license)
 
 ## インストール
 
-実行環境は「Windows Sybsystem for Linux 2」のUbuntuターミナルです。
+実行環境は「Windows Sybsystem for Linux 2」のUbuntuです。
 
-
-Pythonの環境をセットアップします。
-
-以下はpyenvを使用してPython3.7の環境を作成した例。
+このカスタムテンプレートの仕様はPython3.7.0です。
 
 ```console
-$ pyenv local 3.7
-
 $ python3 --version
 Python 3.7.0
 ```
@@ -43,7 +39,7 @@ Python 3.7.0
 仮想環境を作成して有効にし、`Hatch`をインストールします。
 
 ```console
-$ python3 -m venv .venv && . .venv/bin/activate
+$ python3 -m venv .venv && source .venv/bin/activate
 
 $ pip install --upgrade pip
 
@@ -51,6 +47,8 @@ $ pip install hatch keyrings.alt
 ```
 
 「keyrings.alt」はPyPIに公開する際に使います。
+
+## 準備
 
 次に、Hatchプロジェクトの初期化を実行し「pyproject.toml」を作成します。
 
@@ -77,34 +75,65 @@ pyproject.toml
 # ...
 # dynamic = ["version"]  # 動的のキーに対してコメントアウト
 # ...
-dependencies = ["Django"]  # 依存関係にDjangoを設定
+dependencies = ["django<=*.*.*"]  # 依存関係にお好きなDjangoのバージョンを設定
+
+# このプロジェクトでは必要無いのでコメントアウト
+# [tool.hatch.version]
+# path = "django_project/__about__.py"
 ```
 
-「project」テーブルの「dynamic」キーと「dependencies」キーに対して変更を加えます。
+「project」テーブルの「dynamic」キーと「dependencies」キー、そして「tool.hatch.version」テーブルに対して変更を加えます。
 
-Hatchの「run」コマンドを使ってDjangoプロジェクトのカスタムテンプレートを解凍します。
+## Djangoのカスタムテンプレートの読み込み
+
+「CI/CD」が必要な場合と必要ではない場合の読み込み方法を実行します。
+
+「CI/CD」が有りの場合は、`git clone`コマンドで一度レポジトリを落として読み込みます。
+
+```console
+$ git clone
+
+$ ls
+django-on-hatch pyproject.toml
+```
+
+次に`django-admin startproject`コマンドのオプション、`--template`で「django-on-hatch」を指定し、`--extension`でプレースホルダーを設定している「py,txt,toml,html」を指定してプロジェクトを作成します。
 
 ```console
 $ hatch run django-admin startproject \
-    --template=https://github.com/kenno-warise/django-on-hatch/archive/main.zip \
-    --extension=py,toml,txt,html,css \
-    new_app
+    --template=django-on-hatch \
+    --extension=py,txt,toml,html \
+    sample
 ```
 
-作成された「new_app」ディレクトリ内には既にアプリケーションに因んだ環境が整えられています。
+するとカレントディレクトリに「sample」というカスタムテンプレートを読み込んだDjangoプロジェクトが作成されます。
 
-```
-new_app
+「django-on-hatch」ディレクトリの中から、「CI/CD」である「.github」ディレクトリを「sample」ディレクトリ内にコピーします。
+
+```console
+$ ls
+django-on-hatch sample pyproject.toml
+
+$ cp -r django-on-hatch/.github sample/.
+
+$ tree sample -a
+sample
+├── .github
+│   └── workflows
+│       ├── publish.yml
+│       └── test.yml
+├── .gitignore
 ├── LICENSE.txt
 ├── README.md
 ├── config
 │   ├── __init__.py
-│   ├── asgi.py
 │   ├── settings.py
 │   ├── urls.py
 │   └── wsgi.py
 ├── manage.py
-├── new_app
+├── pyproject.toml
+├── requirements.txt
+├── sample
 │   ├── __init__.py
 │   ├── admin.py
 │   ├── apps.py
@@ -112,23 +141,85 @@ new_app
 │   │   └── __init__.py
 │   ├── models.py
 │   ├── static
-│   │   └── new_app
-│   │       └── css
-│   │           └── style.css
+│   │   └── sample
+│   │       ├── css
+│   │       │   └── style.css
+│   │       ├── icon
+│   │       │   └── favicon.png
+│   │       └── js
+│   │           └── style.js
 │   ├── templates
-│   │   └── new_app
+│   │   └── sample
+│   │       ├── base_index.html
 │   │       └── index.html
-│   ├── tests.py
+│   ├── tests
+│   │   ├── __init__.py
+│   │   └── tests.py
 │   ├── urls.py
 │   └── views.py
-├── pyproject.toml
-└── requirements.txt
+└── templates
+    └── base.html
 ```
 
-「new_app」用に設定された「pyproject.toml」が配置されているディレクトリに移動し、hatchの環境を作成します。
+「CI/CD」が無しでも構わない場合は、アーカイブから直接読み込んでしまいます。
 
 ```console
-$ cd new_app
+$ hatch run django-admin startproject \
+    --template=https://github.com/kenno-warise/django-on-hatch/archive/main.zip \
+    --extension=py,txt,toml,html \
+    sample
+```
+
+するとカスタムテンプレートのDjangoプロジェクトが作成されます。
+
+```cosole
+$ tree sample -a
+sample
+├── .gitignore
+├── LICENSE.txt
+├── README.md
+├── config
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+├── manage.py
+├── pyproject.toml
+├── requirements.txt
+├── sample
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── migrations
+│   │   └── __init__.py
+│   ├── models.py
+│   ├── static
+│   │   └── sample
+│   │       ├── css
+│   │       │   └── style.css
+│   │       ├── icon
+│   │       │   └── favicon.png
+│   │       └── js
+│   │           └── style.js
+│   ├── templates
+│   │   └── sample
+│   │       ├── base_index.html
+│   │       └── index.html
+│   ├── tests
+│   │   ├── __init__.py
+│   │   └── tests.py
+│   ├── urls.py
+│   └── views.py
+└── templates
+    └── base.html
+```
+
+## Djangoプロジェクト環境のセットアップ
+
+「sample」ディレクトリに移動し、「pyproject.toml」に設定済みのhatchコマンドをHatchの環境に作成します。
+
+```console
+$ cd sample
 
 $ hatch env create
 
@@ -153,18 +244,15 @@ $ hatch env show
 └─────────┴─────────┴───────────────┴─────────────────┘
 ```
 
-データベースを初期化してアプリを起動します。
+データベースの初期化、スーバーユーザーの作成、サーバーの起動は以下のように実行できます。
 
 ```console
 $ hatch run migrate
 
+$ hatch run createsuperuser
+
 $ hatch run runserver
 ```
-
-![welcome_new_app_1](https://github.com/kenno-warise/django-on-hatch/assets/51676019/0507b913-ff82-4fd8-b776-0afc3f4a2b7e)
-
-
-## 設定
 
 PyPIに公開されるパッケージの名前は「pyproject.toml」の「project」テーブルにある「name」キーとなります。
 
@@ -174,7 +262,7 @@ PyPIに公開されるパッケージの名前は「pyproject.toml」の「proje
 # pyproject.toml
 
 [project]
-name = ["new_app"]
+name = ["sample"]
 # ...
 ```
 
@@ -198,7 +286,7 @@ Djangoのバージョンの変更をしたい場合は以下を編集してく�
 `requirements.txt`
 
 ```
-django==3.2.24
+django<=*.*.*
 ```
 
 ショートカットとしてHatchの「run」コマンドで実行できるDjangoのコマンドは`pyproject.toml`の「tool.hatch.envs.default.scripts」テーブルによって登録しています。
@@ -216,19 +304,7 @@ cov = "coverage run --include=new_app/* --omit=new_app/test*,new_app/__init__.py
 cov-report = "coverage report -m"
 ```
 
-データベースを作成する場合はマイグレートを実行します。
-
-```consolw
-$ hatch run migrate
-```
-
-Djangoを起動します。
-
-```console
-$ hatch run runserver
-```
-
-## 開発
+## デプロイ
 
 バージョン情報の設定
 
@@ -245,8 +321,8 @@ DjangoアプリをパッケージングしてPyPIにアップロードする。
 
 ```toml
 [tool.hatch.build]
-include = ["new_app/*"] # templatesとstaticも含まれます。
-exclude = ["new_app/migrations/*"]
+include = ["sample/*"] # templatesとstaticも含まれます。
+# exclude = ["sample/migrations/*"]
 ```
 
 上記以外にあれば追記します。
@@ -273,55 +349,7 @@ $ hatch publish
 
 ## パッケージの組み込みテスト
 
-プロジェクトはGitHub等に保存しておきます。
-
-既存プロジェクトの「new_app」を削除するか、他のディレクトリに移動します。
-
-```console
-$ ls
-LICENSE.txt  README.md  config  db.sqlite3  manage.py  new_app  pyproject.toml  requirements.txt
-
-$ rm -rf new_app
-```
-
-既存アプリのプロジェクトを作成する前のディレクトリに戻ります。
-
-```console
-$ cd ..
-
-$ ls
-new_app pyproject.toml
-```
-
-アプリ開発のプロジェクトを立ち上げる以前のHatch環境である「pyproject.toml」の「project」テーブルの「dependencies」キーにPyPIへアップロードした「new_app」を定義します。
-
-```toml
-# pyproject.toml
-
-[project]
-# ...
-dependencies = [
-  "Django",
-  "new_app",
-]
-
-```
-
-現在のHatch環境ではDjangoのコマンドを登録していないので、フルコマンドで入力していきます。
-
-必要であればマイグレートとスーパーユーザーを作成します。
-
-```console
-$ hatch run python3 new_app/manage.py migrate
-
-$ hatch run python3 new_app/manage.py createsuperuser
-```
-
-最後にサーバーを起動できれば成功です。
-
-```console
-$ hatch run python3 new_app/manage.py runserver
-```
+**作成中...**
 
 
 ## License
