@@ -7,4 +7,4 @@ class AppPageView(View):
         try:
             return render(request, "{{ project_name }}/base_index.html")
         except Exception as inst:
-            return render(requrest, "{{ project_name }}/index.html")
+            return render(request, "{{ project_name }}/index.html")

@@ -75,24 +75,43 @@ dependencies = [
 ]
 
 [tool.hatch.envs.lint.scripts]
-typing = "mypy --install-types --non-interactive {args:{{ project_name }}/views.py {{ project_name }}/tests.py}"
+typing = "mypy --check-untyped-defs --install-types --non-interactive {{ project_name }}"
 style = [
-  "ruff --fix {args:{{ project_name }}/views.py {{ project_name }}/tests.py}",
-  "black --check --diff {args:{{ project_name }}/views.py {{ project_name }}/tests.py}"
+  "ruff check --fix {{ project_name }}",
+  "black --check --diff {{ project_name }}"
 ]
 all = [
   "style",
   "typing",
 ]
 
+[tool.mypy]
+exclude = [
+  "__init__.py",
+  "__pycache__",
+  "apps.py",
+  "migrations",  
+]
+
 [tool.black]
+exclude = """
+migrations
+"""
 target-version = ["py37"]
-line-length = 120
+line-length = 90
 skip-string-normalization = true
 
 [tool.ruff]
+exclude = [
+  "__init__.py",
+  "__pycache__",
+  "apps.py",
+  "migrations",
+]
 target-version = "py37"
 line-length = 120
+
+[tool.ruff.lint]
 select = [
   "A",
   "ARG",
@@ -144,5 +163,5 @@ ignore = [
 # 以下は配布用Djangoアプリに対しての設定
 [tool.hatch.build]
 include = ["{{ project_name }}/*"]
-exclude = ["{{ project_name }}/migrations/*"]
+# exclude = ["{{ project_name }}/migrations/*"]
 
