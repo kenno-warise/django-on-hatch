@@ -91,7 +91,7 @@ dependencies = ["django<=*.*.*"]  # 依存関係にお好きなDjangoのバー�
 「CI/CD」が有りの場合は、`git clone`コマンドで一度レポジトリを落として読み込みます。
 
 ```console
-$ git clone
+$ git clone https://github.com/kenno-warise/django-on-hatch.git
 
 $ ls
 django-on-hatch pyproject.toml
