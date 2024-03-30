@@ -292,16 +292,19 @@ django<=*.*.*
 ショートカットとしてHatchの「run」コマンドで実行できるDjangoのコマンドは`pyproject.toml`の「tool.hatch.envs.default.scripts」テーブルによって登録しています。
 
 ```toml
+# hatch run runserver
 [tool.hatch.envs.default.scripts]
 migrate = "python3 manage.py migrate"
 makemigrations = "python3 manage.py makemigrations {args}"
 createsuperuser = "python3 manage.py createsuperuser"
 runserver = "python3 manage.py runserver"
-startapp = "python3 manage.py startapp {args}"
 shell = "python3 manage.py shell"
-test = "python3 manage.py test {args}"
-cov = "coverage run --include=new_app/* --omit=new_app/test*,new_app/__init__.py,new_app/migrations/* manage.py test {args}"
+cov = "coverage run manage.py test {args}"
 cov-report = "coverage report -m"
+test = [
+  "cov",
+  "cov-report",
+]
 ```
 
 ## デプロイ
